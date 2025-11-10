@@ -1,0 +1,11 @@
+com\ipn\mx\administracioneventos\AdministracionEventosApplication.class
+com\ipn\mx\administracioneventos\core\domain\Asistente$AsistenteBuilder.class
+com\ipn\mx\administracioneventos\util\service\impl\EmailServiceImpl.class
+com\ipn\mx\administracioneventos\features\evento\controller\EventoController.class
+com\ipn\mx\administracioneventos\features\evento\repository\EventoRepository.class
+com\ipn\mx\administracioneventos\core\domain\Evento.class
+com\ipn\mx\administracioneventos\core\domain\Asistente.class
+com\ipn\mx\administracioneventos\features\evento\service\impl\EventoServiceImpl.class
+com\ipn\mx\administracioneventos\util\service\EmailService.class
+com\ipn\mx\administracioneventos\features\evento\service\EventoService.class
+com\ipn\mx\administracioneventos\core\domain\Evento$EventoBuilder.class
