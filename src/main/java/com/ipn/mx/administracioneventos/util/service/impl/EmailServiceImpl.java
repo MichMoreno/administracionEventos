@@ -30,7 +30,7 @@ public class EmailServiceImpl implements EmailService {
             messageHelper.addAttachment("archivo", new File(resourceFile.getFile().toURI())); //agregar un archivo adjunto llamado archivo obtenido del resourcefile
             messageHelper.setTo(to);
             messageHelper.setSubject(subject);
-            messageHelper.setText(text);
+            messageHelper.setText(text, true);
             mailSender.send(message);
         } catch (Exception e){
             throw new RuntimeException(e);

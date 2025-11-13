@@ -25,7 +25,7 @@ public class Evento implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idEvento", nullable = false)
-    //SQL ==> idEvento serial primary key
+
     private Long idEvento;
 
     @NotEmpty(message = "No puede estar vacío")

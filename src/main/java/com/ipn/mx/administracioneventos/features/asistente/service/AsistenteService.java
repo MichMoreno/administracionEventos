@@ -10,7 +10,7 @@ public interface AsistenteService {
     public List<Asistente> findAllAsistentes();
     public Asistente findByIdAsistente(long id);
     public Asistente saveAsistente(Asistente asistente);
-    public void deleteAsistente(Asistente asistente);
+    public void deleteAsistente(Long id);
 
     public ByteArrayInputStream reportePDF(List<Asistente> listaAsistente);
 
