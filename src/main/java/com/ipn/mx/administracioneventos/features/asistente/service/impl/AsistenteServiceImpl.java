@@ -26,7 +26,7 @@ public class AsistenteServiceImpl implements AsistenteService {
     private AsistenteRepository asistenteRepository;
 
     @Autowired
-    private EmailService emailService; // ✅ SOLO aquí para asistentes
+    private EmailService emailService;
 
     @Override
     @Transactional(readOnly = true)
@@ -45,7 +45,7 @@ public class AsistenteServiceImpl implements AsistenteService {
     public Asistente saveAsistente(Asistente asistente) {
         Asistente asistenteGuardado = asistenteRepository.save(asistente);
 
-        // ✅ SOLO para asistentes: enviar correo de confirmación
+
         enviarCorreoConfirmacion(asistenteGuardado);
 
         return asistenteGuardado;
@@ -57,10 +57,10 @@ public class AsistenteServiceImpl implements AsistenteService {
         asistenteRepository.deleteByIdAsistente(id);
     }
 
-    // ✅ MÉTODO PRIVADO para enviar correo (solo para asistentes)
+
     private void enviarCorreoConfirmacion(Asistente asistente) {
         try {
-            String asunto = "✅ Registro Exitoso - Administración de Eventos";
+            String asunto = "Registro Exitoso - Administración de Eventos";
             String mensaje = String.format("""
                 <html>
                 <body>
@@ -94,10 +94,10 @@ public class AsistenteServiceImpl implements AsistenteService {
             );
 
             emailService.enviarCorreo(asistente.getEmail(), asunto, mensaje);
-            log.info("📧 Correo enviado exitosamente a: {}", asistente.getEmail());
+            log.info("Correo enviado exitosamente a: {}", asistente.getEmail());
 
         } catch (Exception e) {
-            log.error("❌ Error al enviar correo a: {}", asistente.getEmail(), e);
+            log.error("Error al enviar correo a: {}", asistente.getEmail(), e);
             // No lanzar excepción para no afectar el guardado del asistente
         }
     }

@@ -4,10 +4,10 @@ import com.ipn.mx.administracioneventos.core.domain.Asistente;
 import com.ipn.mx.administracioneventos.features.asistente.service.AsistenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +26,7 @@ public class AsistenteController {
         return serviceAsistent.findAllAsistentes();
     }
 
-    // ✅ CORREGIDO: Tipo de retorno ResponseEntity<?>
+
     @GetMapping("/{id}")
     public ResponseEntity<?> readById(@PathVariable long id){
         Asistente asistente = null;
@@ -45,7 +45,7 @@ public class AsistenteController {
             return new ResponseEntity<>(respuesta, HttpStatus.NOT_FOUND);
         }
 
-        // ✅ CORREGIDO: Retorna Asistente directamente
+
         return new ResponseEntity<>(asistente, HttpStatus.OK);
     }
 
@@ -78,14 +78,14 @@ public class AsistenteController {
         }
 
         try {
-            // ✅ CORREGIDO: Actualiza el objeto existente, no crea uno nuevo
+
             a.setNombre(asistente.getNombre());
             a.setEmail(asistente.getEmail());
             a.setMaterno(asistente.getMaterno());
             a.setPaterno(asistente.getPaterno());
             a.setFechaRegistro(asistente.getFechaRegistro());
             a.setIdEvento(asistente.getIdEvento());
-            // NO actualices el ID: a.setIdAsistente(asistente.getIdAsistente());
+
 
             Asistente asistenteActualizado = serviceAsistent.saveAsistente(a);
 
@@ -97,14 +97,14 @@ public class AsistenteController {
 
         respuesta.put("mensaje", "El asistente se ha actualizado con éxito");
         respuesta.put("asistente", a);
-        return new ResponseEntity<>(respuesta, HttpStatus.OK); // ✅ Cambiado a OK
+        return new ResponseEntity<>(respuesta, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable long id){
         Map<String, Object> respuesta = new HashMap<>();
 
-        // ✅ Verificar si existe antes de eliminar
+
         Asistente asistente = serviceAsistent.findByIdAsistente(id);
         if(asistente == null) {
             respuesta.put("mensaje", "El asistente con ID:".concat(String.valueOf(id)).concat(" no existe en la base de datos"));
@@ -121,5 +121,25 @@ public class AsistenteController {
 
         respuesta.put("mensaje", "El asistente ha sido eliminado correctamente");
         return new ResponseEntity<>(respuesta, HttpStatus.OK);
+    }
+    @GetMapping("/reporte-pdf")
+    public ResponseEntity<byte[]> generarReporteAsistentesPDF() {
+        try {
+            List<Asistente> asistentes = serviceAsistent.findAllAsistentes();
+            ByteArrayInputStream pdfStream = serviceAsistent.reportePDF(asistentes);
+
+            byte[] pdfBytes = pdfStream.readAllBytes();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDisposition(ContentDisposition.builder("attachment")
+                    .filename("reporte-asistentes.pdf")
+                    .build());
+
+            return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

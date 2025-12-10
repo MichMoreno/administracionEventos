@@ -15,6 +15,7 @@ public interface EventoRepository extends JpaRepository<Evento, Long> {
     @Query("SELECT e FROM Evento e WHERE e.nombreEvento = :nombre")
     Optional<Evento> findByNombreEvento(@Param("nombre") String nombre);
 
+
     List<Evento> findByNombreEventoContaining(String nombre);
 
     @Query("SELECT e FROM Evento e WHERE e.fechaInicio BETWEEN :inicio AND :fin ORDER BY e.fechaInicio")

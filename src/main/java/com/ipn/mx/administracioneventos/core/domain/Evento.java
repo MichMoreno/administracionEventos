@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -41,10 +42,10 @@ public class Evento implements Serializable {
     @NotNull(message = "La fecha no puede ser nula")
     @FutureOrPresent(message = "La fecha de inicio deberá ser hoy o cualquier fecha en el futuro")
     @Temporal(TemporalType.DATE)
-    private Date fechaInicio;
+    private LocalDate fechaInicio;
     @NotNull(message = "La fecha no puede ser nula")
-    private Date fechaFin;
 
+    private LocalDate fechaFin;
     @OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy = "idEvento")
     @JsonManagedReference
     private List<Asistente> asistentes;

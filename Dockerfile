@@ -1,8 +1,6 @@
 FROM eclipse-temurin:23-jdk-alpine
 LABEL authors="ferna"
-VOLUME /temp
+WORKDIR /app
 COPY target/*.jar app.jar
-ENTRYPOINT ["JAVA", "-jar", "app.jar"]
-
-ENTRYPOINT ["top", "-b"]
 EXPOSE 8080
+ENTRYPOINT ["java", "-Dserver.port=${PORT}", "-jar", "app.jar"]

@@ -6,13 +6,13 @@ import com.ipn.mx.administracioneventos.core.domain.Evento;
 import com.ipn.mx.administracioneventos.features.evento.service.EventoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.core.NestedCheckedException;
 import org.springframework.web.servlet.HandlerMapping;
 
+import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,6 +107,27 @@ public class EventoController {
         }
         respuesta.put("mensaje", "el evento ha sido eliminado corrrectamente");
         return new ResponseEntity<Map<String, Object>>(respuesta, HttpStatus.OK);
+    }
+
+    @GetMapping("/reporte-pdf")
+    public ResponseEntity<byte[]> generarReporteEventosPDF() {
+        try {
+            List<Evento> eventos = service.findAll();
+            ByteArrayInputStream pdfStream = service.reportePDF(eventos);
+
+            byte[] pdfBytes = pdfStream.readAllBytes();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDisposition(ContentDisposition.builder("attachment")
+                    .filename("reporte-eventos.pdf")
+                    .build());
+
+            return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
